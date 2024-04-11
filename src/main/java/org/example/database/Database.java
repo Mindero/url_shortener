@@ -26,17 +26,20 @@ public class Database {
         return localData;
     }
     public void save(String shortUrl, String longUrl){
-        shortUrls.put(shortUrl, longUrl);
-        longUrls.put(longUrl, shortUrl);
+        getDatabase().shortUrls.put(shortUrl, longUrl);
+        getDatabase().longUrls.put(longUrl, shortUrl);
     }
     public String getLongUrl(String shortUrl){
-        return shortUrls.get(shortUrl);
+        return getDatabase().shortUrls.get(shortUrl);
     }
-    public boolean contains(String shortUrl){
-        return shortUrls.containsKey(shortUrl);
+    public boolean containsShortUrl(String shortUrl){
+        return getDatabase().shortUrls.containsKey(shortUrl);
+    }
+    public boolean containsLongUrl(String longUrl){
+        return getDatabase().longUrls.containsKey(longUrl);
     }
     public String getShortUrl(String longUrl){
-        return longUrls.get(longUrl);
+        return getDatabase().longUrls.get(longUrl);
     }
 
 

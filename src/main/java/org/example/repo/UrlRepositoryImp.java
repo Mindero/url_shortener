@@ -13,7 +13,7 @@ public class UrlRepositoryImp implements UrlRepository {
     private final String alph = "0123456789qwertyuiopasdfghjklzxcvbnm";
     public String addUrl(UrlDao urlDao){
         // TODO: Добваить проверку, что shortUrl - действительно ссылка.
-        if (data.contains(urlDao.Url()))
+        if (data.containsLongUrl(urlDao.Url()))
         {
             return data.getShortUrl(urlDao.Url());
         }
@@ -22,6 +22,7 @@ public class UrlRepositoryImp implements UrlRepository {
         return shortUrl;
     }
     public Optional<String> getLongUrl(String shortUrl){
+        if (!data.containsShortUrl(shortUrl)) return Optional.empty();
         return Optional.of(data.getLongUrl(shortUrl));
     }
 
@@ -34,7 +35,7 @@ public class UrlRepositoryImp implements UrlRepository {
                 int random = rnd.nextInt(alph.length());
                 shortUrl.append(alph.charAt(random));
             }
-            if (!data.contains(shortUrl.toString())) break;
+            if (!data.containsShortUrl(shortUrl.toString())) break;
         }
         return shortUrl.toString();
     }
