@@ -25,7 +25,7 @@ public class Database {
         }
         return localData;
     }
-    public void save(String shortUrl, String longUrl){
+    public void save(String longUrl, String shortUrl){
         getDatabase().shortUrls.put(shortUrl, longUrl);
         getDatabase().longUrls.put(longUrl, shortUrl);
     }

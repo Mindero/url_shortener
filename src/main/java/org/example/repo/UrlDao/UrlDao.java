@@ -1,7 +1,10 @@
 package org.example.repo.UrlDao;
 
-public record UrlDao(String Url) {
-    public UrlDao(String Url){
-        this.Url = Url;
+import java.util.Optional;
+
+public record UrlDao(String longUrl, String shortUrl) {
+    public UrlDao (String longUrl, String shortUrl){
+        this.longUrl = longUrl;
+        this.shortUrl = shortUrl;
     }
 }

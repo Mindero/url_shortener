@@ -9,34 +9,26 @@ import java.util.Random;
 
 public class UrlRepositoryImp implements UrlRepository {
     private static final Database data = Database.getDatabase();
-    private static final int sizeShortUrl = 7;
-    private final String alph = "0123456789qwertyuiopasdfghjklzxcvbnm";
+
     public String addUrl(UrlDao urlDao){
         // TODO: Добваить проверку, что shortUrl - действительно ссылка.
-        if (data.containsLongUrl(urlDao.Url()))
-        {
-            return data.getShortUrl(urlDao.Url());
-        }
-        String shortUrl = createShortUrl(urlDao.Url());
-        data.save(shortUrl, urlDao.Url());
-        return shortUrl;
+        data.save(urlDao.longUrl(), urlDao.shortUrl());
+        return urlDao.shortUrl();
     }
-    public Optional<String> getLongUrl(String shortUrl){
-        if (!data.containsShortUrl(shortUrl)) return Optional.empty();
-        return Optional.of(data.getLongUrl(shortUrl));
+    public boolean existLongUrl(UrlDao urlDao){
+        return data.containsLongUrl(urlDao.longUrl());
+    }
+    public boolean existShortUrl(UrlDao urlDao){
+        return data.containsShortUrl(urlDao.shortUrl());
     }
 
-    private String createShortUrl(String longUrl){
-        Random rnd = new Random();
-        StringBuilder shortUrl = new StringBuilder();
-        while(true) { // While shortUrls contains in database
-            shortUrl.setLength(0);
-            for (int i = 0; i < sizeShortUrl; ++i) {
-                int random = rnd.nextInt(alph.length());
-                shortUrl.append(alph.charAt(random));
-            }
-            if (!data.containsShortUrl(shortUrl.toString())) break;
-        }
-        return shortUrl.toString();
+    public Optional<String> getLongUrl(UrlDao urlDao){
+        if (!data.containsShortUrl(urlDao.shortUrl())) return Optional.empty();
+        return Optional.of(data.getLongUrl(urlDao.shortUrl()));
     }
+    public String getShortUrl(UrlDao urlDao){
+        return data.getShortUrl(urlDao.longUrl());
+    }
+
+
 }

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 public interface UrlRepository {
     String addUrl(UrlDao urlDao);
-
-    Optional<String> getLongUrl(String shortUrl);
+    boolean existLongUrl(UrlDao urlDao);
+    boolean existShortUrl(UrlDao urlDao);
+    String getShortUrl(UrlDao urlDao);
+    Optional<String> getLongUrl(UrlDao urlDao);
 }
