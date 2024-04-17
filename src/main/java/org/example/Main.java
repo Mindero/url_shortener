@@ -8,6 +8,7 @@ import org.example.service.UrlService;
 import org.example.service.UrlServiceImp;
 import org.example.service.object.Url;
 import org.example.util.ReadUtil;
+import java.sql.SQLSyntaxErrorException;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
