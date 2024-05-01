@@ -38,7 +38,7 @@ public class jdbcUtils {
         String createUrls = "CREATE TABLE urls " +
                 "(shortUrl TEXT PRIMARY KEY, longUrl TEXT)";
         String users = "CREATE TABLE users " +
-                "(id INTEGER PRIMARY KEY,  login TEXT, password TEXT)";
+                "(id INTEGER PRIMARY KEY,  login TEXT PRIMARY KEY, password INT)";
         String usersUrls = "CREATE TABLE usersUrls " +
                 "(id INTEGER, shortUrl TEXT, " +
                 "FOREIGN KEY (id) REFERENCES users(id)," +

@@ -3,7 +3,7 @@ package org.example;
 import org.example.controller.UrlController;
 import org.example.controller.dto.UrlDto;
 import org.example.exception.URLisNotFind;
-import org.example.repo.UrlRepositoryImp;
+import org.example.repo.url.UrlRepositoryImp;
 import org.example.service.UrlServiceImp;
 import org.example.util.ReadUtil;
 import org.example.jdbc.jdbcUtils;
