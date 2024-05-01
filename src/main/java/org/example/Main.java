@@ -4,16 +4,28 @@ import org.example.controller.UrlController;
 import org.example.controller.dto.UrlDto;
 import org.example.exception.URLisNotFind;
 import org.example.repo.UrlRepositoryImp;
-import org.example.service.UrlService;
 import org.example.service.UrlServiceImp;
-import org.example.service.object.Url;
 import org.example.util.ReadUtil;
-import java.sql.SQLSyntaxErrorException;
+import org.example.jdbc.jdbcUtils;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+        try{
+            boolean connected = jdbcUtils.createConnection();
+            if (!connected){
+                System.out.println("Error with connection to db");
+                return;
+            }
+            // init: jdbcUtils.createTables();
+            userInterface();
+        }
+        finally {
+            jdbcUtils.closeConnection();
+        }
+    }
+    public static void userInterface(){
         while (true) {
             UrlController urlController =
                     new UrlController(new UrlServiceImp(new UrlRepositoryImp()));
@@ -36,6 +48,7 @@ public class Main {
             }
         }
     }
+
     private static String printSelection(){
         return "Выберите действие: 1. Получить короткую ссылку 2. Получить длинную ссылку";
     }

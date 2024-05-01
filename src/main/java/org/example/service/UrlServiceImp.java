@@ -5,6 +5,8 @@ import org.example.service.object.Url;
 import org.example.repo.UrlDao.UrlDao;
 import org.example.exception.URLisNotFind;
 
+import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.util.Optional;
 import java.util.Random;
 
@@ -12,28 +14,35 @@ public class UrlServiceImp implements UrlService{
     private final UrlRepository urlRepository;
 
     private final String alph = "0123456789qwertyuiopasdfghjklzxcvbnm";
-    private static final int sizeShortUrl = 7;
+    private static final int sizeShortUrl = 5;
 
     public UrlServiceImp(UrlRepository urlRepository){
         this.urlRepository = urlRepository;
     }
+    @Override
     public String addUrl(Url longUrl){
-        var urlDao = new UrlDao(longUrl.url(), null);
-        if (urlRepository.existLongUrl(urlDao)) {
-            return urlRepository.getShortUrl(urlDao);
+        String shortUrl = createShortUrl(longUrl.url());
+        var urlDao = new UrlDao(longUrl.url(), shortUrl);
+        try{
+            urlRepository.addUrl(urlDao);
         }
-        else {
-            String shortUrl = createShortUrl(longUrl.url());
-            urlDao = new UrlDao(longUrl.url(), shortUrl);
-            return urlRepository.addUrl(urlDao);
+        catch (SQLException ex){
+            //throw new RuntimeException("Error with adding new url", ex);
         }
+        return shortUrl;
     }
 
+    @Override
     public String getLongUrl(String shortUrl) throws URLisNotFind{
-        var urlDao = new UrlDao(null, shortUrl);
-        Optional<String> longUrl = urlRepository.getLongUrl(urlDao);
+        Optional<UrlDao> longUrl = Optional.empty();
+        try{
+            longUrl = urlRepository.getLongUrl(shortUrl);
+        }
+        catch(SQLException ex){
+            //throw  new RuntimeException("Error with get long url ", ex);
+        }
         if (longUrl.isEmpty()) throw new URLisNotFind();
-        return longUrl.get();
+        return longUrl.get().longUrl();
     }
     private String createShortUrl(String longUrl){
         Random rnd = new Random();
@@ -44,8 +53,13 @@ public class UrlServiceImp implements UrlService{
                 int random = rnd.nextInt(alph.length());
                 shortUrl.append(alph.charAt(random));
             }
-            var urlDao = new UrlDao(longUrl, shortUrl.toString());
-            if (!urlRepository.existShortUrl(urlDao)) break;
+            try{
+                boolean exist = urlRepository.existShortUrl(shortUrl.toString());
+                if (!exist) break;
+            }
+            catch (SQLException ex){
+                //throw new RuntimeException("Error with exist short url ", ex);
+            }
         }
         return shortUrl.toString();
     }
