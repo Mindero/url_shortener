@@ -2,11 +2,18 @@ package org.example;
 
 import org.example.controller.UrlController;
 import org.example.controller.dto.UrlDto;
+import org.example.controller.dto.UserDto;
 import org.example.exception.URLisNotFind;
+import org.example.exception.UserExistException;
+import org.example.exception.UserPasswordIncorrect;
 import org.example.repo.url.UrlRepositoryImp;
-import org.example.service.UrlServiceImp;
+import org.example.repo.user.UserRepositoryImp;
+import org.example.service.url.UrlServiceImp;
+import org.example.service.user.UserServiceImp;
 import org.example.util.ReadUtil;
 import org.example.jdbc.jdbcUtils;
+
+import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -18,7 +25,8 @@ public class Main {
                 System.out.println("Error with connection to db");
                 return;
             }
-            // init: jdbcUtils.createTables();
+            // init:
+            //jdbcUtils.createTables();
             userInterface();
         }
         finally {
@@ -27,7 +35,35 @@ public class Main {
     }
     public static void userInterface(){
         while (true) {
-            UrlController urlController =
+            UrlController urlController = new UrlController(new UserServiceImp(new UserRepositoryImp()));
+            System.out.println(printSelection());
+            String choosenService = ReadUtil.readLine();
+            Scanner sc= new Scanner(System.in); //System.in is a standard input stream
+            if (choosenService.equals("1")) {
+                System.out.println("Введите логин и пароль");
+                String login = sc.next();
+                String password = sc.next();
+                try{
+                    urlController.login(new UserDto(login, password));
+                    System.out.println("Вы успешно вошли в аккаунт");
+                }
+                catch (UserPasswordIncorrect ex){
+                    System.out.println(ex.getMessage());
+                }
+            } else if (choosenService.equals("2")) {System.out.println("Введите логин и пароль");
+                String login = sc.next();
+                String password = sc.next();
+                try{
+                    urlController.register(new UserDto(login, password));
+                    System.out.println("Вы успешно зарегестрировались");
+                }
+                catch (UserExistException ex){
+                    System.out.println(ex.getMessage());
+                }
+            }
+            urlController.print();
+        }
+            /*UrlController urlController =
                     new UrlController(new UrlServiceImp(new UrlRepositoryImp()));
             System.out.println(printSelection());
             String choosenService = ReadUtil.readLine();
@@ -46,11 +82,11 @@ public class Main {
                     System.out.println(ex.getMessage());
                 }
             }
-        }
+        }*/
     }
 
     private static String printSelection(){
-        return "Выберите действие: 1. Получить короткую ссылку 2. Получить длинную ссылку";
+        return "Выберите действие: 1. Login 2. Register 3. Получить короткую ссылку 4. Получить длинную ссылку";
     }
 }
 

@@ -31,14 +31,14 @@ public class jdbcUtils {
             System.out.println("Error executeUpdate " + ex.getMessage());
         }
     }
-    private static void createTables(){
+    public static void createTables(){
         executeUpdate("DROP TABLE usersUrls");
         executeUpdate("DROP TABLE urls");
         executeUpdate("DROP TABLE users");
         String createUrls = "CREATE TABLE urls " +
                 "(shortUrl TEXT PRIMARY KEY, longUrl TEXT)";
         String users = "CREATE TABLE users " +
-                "(id INTEGER PRIMARY KEY,  login TEXT PRIMARY KEY, password INT)";
+                "(id INT PRIMARY KEY, password INT)";
         String usersUrls = "CREATE TABLE usersUrls " +
                 "(id INTEGER, shortUrl TEXT, " +
                 "FOREIGN KEY (id) REFERENCES users(id)," +

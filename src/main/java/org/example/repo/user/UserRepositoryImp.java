@@ -13,16 +13,27 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class UserRepositoryImp implements UserRepository {
-    public void addUser(int id, String login, String password) throws SQLException {
-        int hash_password = password.hashCode();
+    public void addUser(int id, int password) throws SQLException {
         Connection connection = jdbcUtils.getConnection();
-        String query = "INSERT INTO users (id, login, password) " +
-                "VALUES (?, ?, ?)";
+        String query = "INSERT INTO users (id, password) " +
+                "VALUES (?, ?)";
         PreparedStatement preparedStatement =connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setInt(1, id);
-        preparedStatement.setString(2, login);
-        preparedStatement.setInt(3, hash_password);
+        preparedStatement.setInt(2, password);
         preparedStatement.execute();
+    }
+    public Optional<UserDao> login(int id, int password) throws SQLException{
+        Connection connection = jdbcUtils.getConnection();
+        String query = "SELECT id, password FROM users WHERE id=? and password=?";
+        PreparedStatement preparedStatement= connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        preparedStatement.setInt(2, password);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            UserDao userDao = new UserDao(resultSet.getInt("id"));
+            return Optional.of(userDao);
+        }
+        return Optional.empty();
     }
     public boolean shortUrlExist(UserDao userDao, String shortUrl) throws SQLException {
         Connection connection = jdbcUtils.getConnection();
@@ -36,11 +47,11 @@ public class UserRepositoryImp implements UserRepository {
         }
         return false;
     }
-    public boolean userExistByLogin(String login) throws SQLException {
+    public boolean userExist(int id) throws SQLException {
         Connection connection = jdbcUtils.getConnection();
-        String query = "SELECT id FROM users WHERE login=?";
+        String query = "SELECT id FROM users WHERE id=?";
         PreparedStatement preparedStatement= connection.prepareStatement(query);
-        preparedStatement.setString(1, login);
+        preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()){
             return true;

@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.url;
 
 import org.example.service.object.Url;
 import org.example.exception.URLisNotFind;

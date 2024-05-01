@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.url;
 
 import org.example.repo.url.UrlRepository;
 import org.example.service.object.Url;
