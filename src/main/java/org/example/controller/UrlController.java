@@ -4,6 +4,7 @@ import org.example.controller.dto.UserDto;
 import org.example.exception.URLisNotFind;
 import org.example.exception.UserExistException;
 import org.example.exception.UserPasswordIncorrect;
+import org.example.exception.logoutException;
 import org.example.service.object.Url;
 import org.example.controller.dto.UrlDto;
 import org.example.service.url.UrlService;
@@ -20,13 +21,16 @@ public class UrlController {
     public boolean register(UserDto userDto) throws UserExistException {
         return userService.register(userDto.login(), userDto.password());
     }
+    public void logout() throws logoutException {
+        userService.logout();
+    }
     public void print(){
         userService.print();
     }
-/*    public String addShortUrl(UrlDto urlDto){
-        return urlService.addUrl(new Url(urlDto.longUrl()));
+    public String addShortUrl(UrlDto urlDto){
+        return userService.addUrl(new Url(urlDto.longUrl()));
     }
     public String getLongUrl(String shortUrl) throws URLisNotFind{
-        return urlService.getLongUrl(shortUrl);
-    }*/
+        return userService.getLongUrl(shortUrl);
+    }
 }

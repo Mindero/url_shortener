@@ -6,6 +6,7 @@ import org.example.controller.dto.UserDto;
 import org.example.exception.URLisNotFind;
 import org.example.exception.UserExistException;
 import org.example.exception.UserPasswordIncorrect;
+import org.example.exception.logoutException;
 import org.example.repo.url.UrlRepositoryImp;
 import org.example.repo.user.UserRepositoryImp;
 import org.example.service.url.UrlServiceImp;
@@ -35,44 +36,38 @@ public class Main {
     }
     public static void userInterface(){
         while (true) {
-            UrlController urlController = new UrlController(new UserServiceImp(new UserRepositoryImp()));
+            UrlController urlController = new UrlController(new UserServiceImp(new UserRepositoryImp(),
+                    new UrlServiceImp(new UrlRepositoryImp())));
             System.out.println(printSelection());
             String choosenService = ReadUtil.readLine();
-            Scanner sc= new Scanner(System.in); //System.in is a standard input stream
+            Scanner sc = new Scanner(System.in); //System.in is a standard input stream
             if (choosenService.equals("1")) {
                 System.out.println("Введите логин и пароль");
                 String login = sc.next();
                 String password = sc.next();
-                try{
+                try {
                     urlController.login(new UserDto(login, password));
                     System.out.println("Вы успешно вошли в аккаунт");
-                }
-                catch (UserPasswordIncorrect ex){
+                } catch (UserPasswordIncorrect ex) {
                     System.out.println(ex.getMessage());
                 }
-            } else if (choosenService.equals("2")) {System.out.println("Введите логин и пароль");
+            } else if (choosenService.equals("2")) {
+                System.out.println("Введите логин и пароль");
                 String login = sc.next();
                 String password = sc.next();
-                try{
+                try {
                     urlController.register(new UserDto(login, password));
                     System.out.println("Вы успешно зарегестрировались");
-                }
-                catch (UserExistException ex){
+                } catch (UserExistException ex) {
                     System.out.println(ex.getMessage());
                 }
             }
-            urlController.print();
-        }
-            /*UrlController urlController =
-                    new UrlController(new UrlServiceImp(new UrlRepositoryImp()));
-            System.out.println(printSelection());
-            String choosenService = ReadUtil.readLine();
-            if (choosenService.equals("1")) {
+            else if (choosenService.equals("3")) {
                 System.out.println("Введите длинный url");
                 String url = ReadUtil.readLine();
                 String shortUrl = urlController.addShortUrl(new UrlDto(url));
                 System.out.printf("Короткая ссылка: %s\n", shortUrl);
-            } else if (choosenService.equals("2")) {
+            } else if (choosenService.equals("4")) {
                 System.out.println("Введите короткий url");
                 String url = ReadUtil.readLine();
                 try {
@@ -82,11 +77,22 @@ public class Main {
                     System.out.println(ex.getMessage());
                 }
             }
-        }*/
+            else if (choosenService.equals("5")) {
+                try{
+                    urlController.logout();
+                    System.out.println("Вы вышли из аккаунта");
+                }
+                catch(logoutException ex){
+                    System.out.println(ex.getMessage());
+                }
+            }
+            urlController.print();
+        }
     }
 
     private static String printSelection(){
-        return "Выберите действие: 1. Login 2. Register 3. Получить короткую ссылку 4. Получить длинную ссылку";
+        return "Выберите действие: 1. Login\n2. Register\n3. Получить короткую ссылку\n4. Получить длинную ссылку\n" +
+                "5. logout";
     }
 }
 
