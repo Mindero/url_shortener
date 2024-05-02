@@ -1,6 +1,6 @@
-package org.example.repo;
+package org.example.repo.url;
 
-import org.example.repo.UrlDao.UrlDao;
+import org.example.repo.url.UrlDao.UrlDao;
 
 import java.sql.SQLException;
 import java.util.Optional;

@@ -1,29 +1,16 @@
-package org.example.repo;
+package org.example.repo.url;
 
 import org.example.jdbc.jdbcUtils;
-import org.example.repo.UrlDao.UrlDao;
-import org.example.database.Database;
+import org.example.repo.url.UrlDao.UrlDao;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.Random;
 
 
 public class UrlRepositoryImp implements UrlRepository {
-    /*
-        Urls = "CREATE TABLE urls " +
-                "(shortUrl TEXT PRIMARY KEY, longUrl TEXT)";
-        users = "CREATE TABLE users " +
-                "(id INTEGER PRIMARY KEY,  login TEXT, password TEXT)";
-        usersUrls = "CREATE TABLE usersUrls " +
-                "(userId INTEGER, shortUrl TEXT," +
-                "FOREIGN KEY (userId) REFERENCES users(id)," +
-                "FOREIGN KEY (shortUrl) REFERENCES urls(shortUrl))";
-    */
     @Override
     public String addUrl(UrlDao urlDao) throws SQLException {
         // TODO: Добваить проверку, что shortUrl - действительно ссылка.

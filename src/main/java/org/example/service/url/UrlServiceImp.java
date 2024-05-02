@@ -1,12 +1,11 @@
-package org.example.service;
+package org.example.service.url;
 
-import org.example.repo.UrlRepository;
+import org.example.repo.url.UrlRepository;
 import org.example.service.object.Url;
-import org.example.repo.UrlDao.UrlDao;
+import org.example.repo.url.UrlDao.UrlDao;
 import org.example.exception.URLisNotFind;
 
 import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
 import java.util.Optional;
 import java.util.Random;
 
