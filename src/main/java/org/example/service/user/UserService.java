@@ -11,7 +11,7 @@ public interface UserService {
     boolean login(String login, String password) throws UserPasswordIncorrect;
     void logout() throws logoutException;
     void print();
-    String addUrl(Url LongUrl);
+    String addUrl(Url LongUrl) throws logoutException;
 
     String getLongUrl(String shortUrl) throws URLisNotFind;
 }

@@ -27,7 +27,7 @@ public class UrlController {
     public void print(){
         userService.print();
     }
-    public String addShortUrl(UrlDto urlDto){
+    public String addShortUrl(UrlDto urlDto) throws logoutException{
         return userService.addUrl(new Url(urlDto.longUrl()));
     }
     public String getLongUrl(String shortUrl) throws URLisNotFind{

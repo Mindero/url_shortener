@@ -58,4 +58,13 @@ public class UserRepositoryImp implements UserRepository {
         }
         return false;
     }
+    public void addUrl(UserDao userDao, String shortUrl) throws SQLException{
+        Connection connection = jdbcUtils.getConnection();
+        String query = "INSERT INTO usersUrls (id, shortUrl) " +
+                "VALUES (?, ?)";
+        PreparedStatement preparedStatement =connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        preparedStatement.setInt(1, userDao.id());
+        preparedStatement.setString(2, shortUrl);
+        preparedStatement.execute();
+    }
 }

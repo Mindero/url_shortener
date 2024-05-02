@@ -65,8 +65,13 @@ public class Main {
             else if (choosenService.equals("3")) {
                 System.out.println("Введите длинный url");
                 String url = ReadUtil.readLine();
-                String shortUrl = urlController.addShortUrl(new UrlDto(url));
-                System.out.printf("Короткая ссылка: %s\n", shortUrl);
+                try {
+                    String shortUrl = urlController.addShortUrl(new UrlDto(url));
+                    System.out.printf("Короткая ссылка: %s\n", shortUrl);
+                }
+                catch(logoutException ex){
+                    System.out.println(ex.getMessage());
+                }
             } else if (choosenService.equals("4")) {
                 System.out.println("Введите короткий url");
                 String url = ReadUtil.readLine();
@@ -86,7 +91,7 @@ public class Main {
                     System.out.println(ex.getMessage());
                 }
             }
-            urlController.print();
+            //urlController.print();
         }
     }
 

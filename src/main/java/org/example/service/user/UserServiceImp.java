@@ -64,8 +64,17 @@ public class UserServiceImp implements UserService{
         }
         else System.out.println(user.id());
     }
-    public String addUrl(Url LongUrl){
-        return urlService.addUrl(LongUrl);
+    public String addUrl(Url LongUrl) throws logoutException{
+        if (user == null) throw new logoutException();
+        String shortUrl = urlService.addUrl(LongUrl);
+        try{
+            userRepository.addUrl(new UserDao(user.id()), shortUrl);
+        }
+        catch (SQLException ex)
+        {
+            throw new RuntimeException("Error with user add url" + ex.getMessage());
+        }
+        return shortUrl;
     }
     public String getLongUrl(String shortUrl) throws URLisNotFind{
         return urlService.getLongUrl(shortUrl);
