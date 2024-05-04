@@ -13,13 +13,15 @@ import org.example.service.url.UrlServiceImp;
 import org.example.service.user.UserServiceImp;
 import org.example.util.ReadUtil;
 import org.example.jdbc.jdbcUtils;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Scanner;
-
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+        org.springframework.context.ApplicationContext context =new ClassPathXmlApplicationContext("app-context.xml");
         try{
             boolean connected = jdbcUtils.createConnection();
             if (!connected){
@@ -28,21 +30,22 @@ public class Main {
             }
             // init:
             //jdbcUtils.createTables();
-            userInterface();
+            userInterface(context);
         }
         finally {
             jdbcUtils.closeConnection();
         }
     }
-    public static void userInterface(){
+    public static void userInterface(ApplicationContext context){
         while (true) {
-            UrlController urlController = new UrlController(new UserServiceImp(new UserRepositoryImp(),
-                    new UrlServiceImp(new UrlRepositoryImp())));
+            //UrlController urlController = new UrlController(new UserServiceImp(new UserRepositoryImp(),
+                    //new UrlServiceImp(new UrlRepositoryImp())));
+            UrlController urlController = context.getBean("urlController", UrlController.class);
             System.out.println(printSelection());
             String choosenService = ReadUtil.readLine();
             Scanner sc = new Scanner(System.in); //System.in is a standard input stream
             if (choosenService.equals("1")) {
-                System.out.println("Введите логин и пароль");
+                System.out.println("Entry login and password");
                 String login = sc.next();
                 String password = sc.next();
                 try {
@@ -52,7 +55,7 @@ public class Main {
                     System.out.println(ex.getMessage());
                 }
             } else if (choosenService.equals("2")) {
-                System.out.println("Введите логин и пароль");
+                System.out.println("Entry login and password");
                 String login = sc.next();
                 String password = sc.next();
                 try {
@@ -63,21 +66,21 @@ public class Main {
                 }
             }
             else if (choosenService.equals("3")) {
-                System.out.println("Введите длинный url");
+                System.out.println("Entry long url");
                 String url = ReadUtil.readLine();
                 try {
                     String shortUrl = urlController.addShortUrl(new UrlDto(url));
-                    System.out.printf("Короткая ссылка: %s\n", shortUrl);
+                    System.out.printf("Short url: %s\n", shortUrl);
                 }
                 catch(logoutException ex){
                     System.out.println(ex.getMessage());
                 }
             } else if (choosenService.equals("4")) {
-                System.out.println("Введите короткий url");
+                System.out.println("Entry short url");
                 String url = ReadUtil.readLine();
                 try {
                     String longUrl = urlController.getLongUrl(url);
-                    System.out.printf("Короткая ссылка: %s\n", longUrl);
+                    System.out.printf("Long url: %s\n", longUrl);
                 } catch (URLisNotFind ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -96,7 +99,7 @@ public class Main {
     }
 
     private static String printSelection(){
-        return "Выберите действие: 1. Login\n2. Register\n3. Получить короткую ссылку\n4. Получить длинную ссылку\n" +
+        return "Choose action: 1. Login\n2. Register\n3. Get short url\n4. Get long url\n" +
                 "5. logout";
     }
 }

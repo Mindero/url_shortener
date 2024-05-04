@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean class="org.example.repo.url.UrlRepositoryImp" id="urlRepository"/>
+    <bean class="org.example.repo.user.UserRepositoryImp" id="userRepository"/>
+    <bean class="org.example.service.url.UrlServiceImp" id="urlService">
+        <constructor-arg name="urlRepository" ref="urlRepository"/>
+    </bean>
+    <bean class="org.example.service.user.UserServiceImp" id="userService">
+        <constructor-arg name="urlService" ref="urlService"/>
+        <constructor-arg name="userRepository" ref="userRepository"/>
+    </bean>
+    <bean class="org.example.controller.UrlController" id="urlController">
+        <constructor-arg name="userService" ref="userService"/>
+    </bean>
+</beans>

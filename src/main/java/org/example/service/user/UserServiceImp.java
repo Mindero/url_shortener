@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.Random;
 
 public class UserServiceImp implements UserService{
-    static User user;
+    static User user = null;
     private final UserRepository userRepository;
     private final UrlService urlService;
     public UserServiceImp(UserRepository userRepository, UrlService urlService ) {
