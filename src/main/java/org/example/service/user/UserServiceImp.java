@@ -10,11 +10,12 @@ import org.example.repo.user.UserRepository;
 import org.example.service.object.Url;
 import org.example.service.object.User;
 import org.example.service.url.UrlService;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Random;
-
+@Service
 public class UserServiceImp implements UserService{
     static User user = null;
     private final UserRepository userRepository;
