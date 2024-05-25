@@ -35,6 +35,7 @@ public class UrlController {
     }
     @PostMapping(path="/short", consumes = "application/json")
     public String addShortUrl(@RequestBody UrlDto urlDto) throws logoutException{
+        System.out.println("Short");
         return userService.addUrl(new Url(urlDto.url()));
     }
     @GetMapping("/{shortUrl}")

@@ -1,16 +1,20 @@
 package org.example.repo.user;
 
-import org.example.exception.UserExistException;
-import org.example.repo.user.UserDao.UserDao;
-import org.example.service.object.User;
+import org.example.jdbc.jdbcUtils;
+import org.example.repo.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public interface UserRepository {
-    void addUser(int id, int password) throws SQLException;
-    Optional<UserDao> login(int id, int password) throws SQLException;
-    boolean shortUrlExist(UserDao userDao, String shortUrl) throws SQLException;
-    boolean userExist(int id) throws SQLException;
-    void addUrl(UserDao userDao, String shortUrl) throws SQLException;
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    int getIdByLoginAndPassword(String login, String password);
+    boolean existsByLogin(String login);
+
+    Optional<UserEntity> findOptionalByLoginAndPassword(String login, String password);
 }

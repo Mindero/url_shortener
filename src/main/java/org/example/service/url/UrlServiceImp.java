@@ -1,9 +1,12 @@
 package org.example.service.url;
 
+import org.example.repo.entity.UrlEntity;
+import org.example.repo.entity.UserEntity;
 import org.example.repo.url.UrlRepository;
+import org.example.repo.user.UserRepository;
 import org.example.service.object.Url;
-import org.example.repo.url.UrlDao.UrlDao;
 import org.example.exception.URLisNotFind;
+import org.example.service.object.User;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -14,53 +17,37 @@ import java.util.Random;
 public class UrlServiceImp implements UrlService{
     private final UrlRepository urlRepository;
 
-    private final String alph = "0123456789qwertyuiopasdfghjklzxcvbnm";
-    private static final int sizeShortUrl = 5;
-
-    public UrlServiceImp(UrlRepository urlRepository){
+    public UrlServiceImp(UrlRepository urlRepository, UserRepository userRepository){
         this.urlRepository = urlRepository;
     }
     @Override
-    public String addUrl(Url longUrl){
+    public String addUrl(Url longUrl, User user){
         String shortUrl = createShortUrl(longUrl.url());
-        var urlDao = new UrlDao(longUrl.url(), shortUrl);
-        try{
-            urlRepository.addUrl(urlDao);
-        }
-        catch (SQLException ex){
-            //throw new RuntimeException("Error with adding new url", ex);
-        }
+        UserEntity userEntity = new UserEntity(user.id());
+        UrlEntity urlEntity = new UrlEntity(shortUrl, longUrl.url(), userEntity);
+        urlRepository.save(urlEntity);
         return shortUrl;
     }
 
     @Override
     public String getLongUrl(String shortUrl) throws URLisNotFind{
-        Optional<UrlDao> longUrl = Optional.empty();
-        try{
-            longUrl = urlRepository.getLongUrl(shortUrl);
-        }
-        catch(SQLException ex){
-            //throw  new RuntimeException("Error with get long url ", ex);
-        }
-        if (longUrl.isEmpty()) throw new URLisNotFind();
-        return longUrl.get().longUrl();
+        if (!urlRepository.existsByShorturl(shortUrl))
+            throw new URLisNotFind();
+        var res = urlRepository.findById(shortUrl);
+        return res.get().getLongurl();
     }
     private String createShortUrl(String longUrl){
         Random rnd = new Random();
+        final int sizeShortUrl = 5;
         StringBuilder shortUrl = new StringBuilder();
         while(true) { // While shortUrl contains in database
             shortUrl.setLength(0);
             for (int i = 0; i < sizeShortUrl; ++i) {
+                String alph = "0123456789qwertyuiopasdfghjklzxcvbnm";
                 int random = rnd.nextInt(alph.length());
                 shortUrl.append(alph.charAt(random));
             }
-            try{
-                boolean exist = urlRepository.existShortUrl(shortUrl.toString());
-                if (!exist) break;
-            }
-            catch (SQLException ex){
-                //throw new RuntimeException("Error with exist short url ", ex);
-            }
+            if (!urlRepository.existsByShorturl(shortUrl.toString())) break;
         }
         return shortUrl.toString();
     }

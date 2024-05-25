@@ -1,12 +1,15 @@
 package org.example.repo.url;
 
-import org.example.repo.url.UrlDao.UrlDao;
+import org.example.repo.entity.UrlEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
-import java.util.Optional;
+import java.util.List;
 
-public interface UrlRepository {
-    String addUrl(UrlDao urlDao) throws SQLException;
-    Optional<UrlDao> getLongUrl(String shortUrl) throws SQLException;
-    boolean existShortUrl(String shortUrl) throws SQLException;
+@Repository
+public interface UrlRepository extends JpaRepository<UrlEntity, String> {
+    List<String> getLongurlByShorturl(String shorturl);
+    boolean existsByShorturl(String shorturl);
 }
