@@ -1,5 +1,5 @@
 package org.example.service.object;
 
-public record User(int id) {
-    public User(int id){this.id = id;}
+public record User(long id) {
+    public User(long id){this.id = id;}
 }

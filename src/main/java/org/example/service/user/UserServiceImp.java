@@ -4,8 +4,7 @@ import org.example.exception.URLisNotFind;
 import org.example.exception.UserExistException;
 import org.example.exception.UserPasswordIncorrect;
 import org.example.exception.logoutException;
-import org.example.repo.url.UrlRepository;
-import org.example.repo.user.UserDao.UserDao;
+import org.example.repo.entity.UserEntity;
 import org.example.repo.user.UserRepository;
 import org.example.service.object.Url;
 import org.example.service.object.User;
@@ -14,69 +13,42 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.Random;
+
 @Service
 public class UserServiceImp implements UserService{
-    static User user = null;
+    static User user =null;
     private final UserRepository userRepository;
     private final UrlService urlService;
     public UserServiceImp(UserRepository userRepository, UrlService urlService ) {
         this.userRepository = userRepository;
         this.urlService = urlService;
     }
-    public boolean register(String login, String password) throws UserExistException{
-        int id = login.hashCode();
-        int hash_password = password.hashCode();
-        try {
-            if (userRepository.userExist(id)) throw new UserExistException();
-        }
-        catch (SQLException ex){
-            throw new RuntimeException("Error with userExistByLogin " + ex.getMessage());
-        }
-        try{
-            userRepository.addUser(id, hash_password);
-            user = new User(id);
-        }
-        catch (SQLException ex){
-            throw new RuntimeException("Error with addUser " + ex.getMessage());
-        }
-        return true;
+    @Override
+    public void register(String login, String password) throws UserExistException{
+        if (userRepository.existsByLogin(login))
+            throw new UserExistException();
+        UserEntity userEntity = new UserEntity(login, password);
+        UserEntity savedUser = userRepository.saveAndFlush(userEntity);
+        user = new User(savedUser.getId());
     }
-    public boolean login(String login, String password) throws UserPasswordIncorrect{
-        try {
-            Optional<UserDao> userDao = userRepository.login(login.hashCode(), password.hashCode());
-            if (userDao.isEmpty()) throw new UserPasswordIncorrect();
-            else {
-                user = new User(userDao.get().id());
-                return true;
-            }
-        }
-        catch (SQLException ex){
-            throw new RuntimeException("Error with login" + ex.getMessage());
-        }
+    @Override
+    public void login(String login, String password) throws UserPasswordIncorrect{
+        Optional<UserEntity> loginUser = userRepository.findOptionalByLoginAndPassword(login, password);
+        if (loginUser.isEmpty())
+            throw new UserPasswordIncorrect();
+        user = new User(loginUser.get().getId());
     }
+    @Override
     public void logout() throws logoutException{
         if (user == null) throw new logoutException();
         user = null;
     }
-    public void print() {
-        if (user == null){
-            System.out.println("null");
-        }
-        else System.out.println(user.id());
-    }
+    @Override
     public String addUrl(Url LongUrl) throws logoutException{
         if (user == null) throw new logoutException();
-        String shortUrl = urlService.addUrl(LongUrl);
-        try{
-            userRepository.addUrl(new UserDao(user.id()), shortUrl);
-        }
-        catch (SQLException ex)
-        {
-            throw new RuntimeException("Error with user add url" + ex.getMessage());
-        }
-        return shortUrl;
+        return urlService.addUrl(LongUrl, user);
     }
+    @Override
     public String getLongUrl(String shortUrl) throws URLisNotFind{
         return urlService.getLongUrl(shortUrl);
     }
