@@ -1,10 +1,13 @@
 package org.example.jdbc;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+@Configuration
 public class jdbcUtils {
     private static final String DB_URL = "jdbc:h2:~/db;AUTO_SERVER=TRUE";
     private static final String user = "admin";
@@ -12,6 +15,7 @@ public class jdbcUtils {
 
     private static Connection connection;
 
+    @Bean(value="connection")
     public static boolean createConnection(){
         try{
             connection = DriverManager.getConnection(DB_URL, user, passwd);

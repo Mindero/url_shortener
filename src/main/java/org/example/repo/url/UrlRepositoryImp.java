@@ -2,6 +2,7 @@ package org.example.repo.url;
 
 import org.example.jdbc.jdbcUtils;
 import org.example.repo.url.UrlDao.UrlDao;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-
+@Repository
 public class UrlRepositoryImp implements UrlRepository {
     @Override
     public String addUrl(UrlDao urlDao) throws SQLException {

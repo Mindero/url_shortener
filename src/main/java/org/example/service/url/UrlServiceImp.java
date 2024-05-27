@@ -4,11 +4,13 @@ import org.example.repo.url.UrlRepository;
 import org.example.service.object.Url;
 import org.example.repo.url.UrlDao.UrlDao;
 import org.example.exception.URLisNotFind;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Random;
 
+@Service
 public class UrlServiceImp implements UrlService{
     private final UrlRepository urlRepository;
 

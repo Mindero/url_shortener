@@ -4,6 +4,7 @@ import org.example.exception.UserExistException;
 import org.example.jdbc.jdbcUtils;
 import org.example.repo.url.UrlDao.UrlDao;
 import org.example.repo.user.UserDao.UserDao;
+import org.springframework.stereotype.Repository;
 
 import java.security.spec.ECParameterSpec;
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
-
+@Repository
 public class UserRepositoryImp implements UserRepository {
     public void addUser(int id, int password) throws SQLException {
         Connection connection = jdbcUtils.getConnection();
