@@ -1,0 +1,1 @@
+docker compose --env-file local_var/local.env -p url up -d
