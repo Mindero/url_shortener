@@ -1,29 +1,33 @@
 services:
   db:
-    image: postgres:14.8-alpine3.18
+#    image: postgres:latest
+    build:
+      context: .
+      dockerfile: database.Dockerfile
+    restart: always
     container_name: db
     environment:
       POSTGRES_DB: url
       POSTGRES_USER: user
-      PGUSER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_HOST_AUTH_METHOD: trust
-    volumes:
-      - ./src/main/resources/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 5432:5432
-#  url-service:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    environment:
-#      JAVA_OPTS: >-
-#        -XX:+UseZGC
-#        -Xms256M
-#        -Xmx2G
-#        SPRING_PROFILES_ACTIVE: "${SPRING_PROFILES}"
-#      ports:
-#        - "8080:8080"
-#    depends_on:
-#      db:
-#        condition: service_completed_successfully
+  url-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      JAVA_OPTS:
+        -Xms256M
+        -Xmx2G
+      SPRING_PROFILES_ACTIVE: local
+      DB_NAME: url
+      DB_URL: jdbc:postgresql://db:5432/url
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_PORT: 5432
+      ports:
+        -8080:8080
+    depends_on:
+      db:
+        condition: service_started

@@ -1,9 +1,8 @@
 ARG JAVA_IMAGE=openjdk:17-oracle
-ARG JAR_FILE=build/libs/*.jar
 
 FROM ${JAVA_IMAGE}
-WORKDIR /app
+USER nobody
+COPY build/libs/*.jar /opt/application/application.jar
+WORKDIR /opt/application
 
-COPY ${JAR_FILE} /application.jar
-
-ENTRYPOINT java $JAVA_OPTS -jar /app/application.jar $JAVA_ARGS
+ENTRYPOINT java $JAVA_OPTS -jar     /opt/application/application.jar $JAVA_ARGS

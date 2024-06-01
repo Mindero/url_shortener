@@ -3,7 +3,7 @@ package org.example.repo.entity;
 import jakarta.persistence.*;
 
 @Entity(name="url")
-@Table(name="urls")
+@Table(name="urls", schema="public")
 public class UrlEntity {
     @Id
     @Column(name="short_url")
