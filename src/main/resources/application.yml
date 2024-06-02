@@ -2,15 +2,15 @@ spring:
   application:
     name: url-app
   datasource:
-    url: jdbc:postgresql://db:5432/url
-    username: user
-    password: password
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class: org.postgresql.Driver
   liquibase:
     enabled: false
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 logging:

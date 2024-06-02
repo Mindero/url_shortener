@@ -42,4 +42,9 @@ public class UrlController {
     public UrlDto getLongUrl(@PathVariable("shortUrl") String shortUrl) throws URLisNotFind{
         return new UrlDto(userService.getLongUrl(shortUrl));
     }
+    // Test
+//    @GetMapping("/print")
+//    public String print(){
+//        return "Hello";
+//    }
 }

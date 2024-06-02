@@ -7,9 +7,9 @@ services:
     restart: always
     container_name: db
     environment:
-      POSTGRES_DB: url
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - 5432:5432
   url-service:
@@ -20,14 +20,15 @@ services:
       JAVA_OPTS:
         -Xms256M
         -Xmx2G
-      SPRING_PROFILES_ACTIVE: local
-      DB_NAME: url
-      DB_URL: jdbc:postgresql://db:5432/url
-      DB_USER: user
-      DB_PASSWORD: password
-      DB_PORT: 5432
-      ports:
-        -8080:8080
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES}
+      DB_NAME: ${DB_NAME}
+      DB_URL: ${DB_URL}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+    ports:
+      - 8080:8080
     depends_on:
-      db:
-        condition: service_started
+      - db
+    stdin_open: true
+    tty: true
