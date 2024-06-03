@@ -6,6 +6,11 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class: org.postgresql.Driver
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: ${REDIS_PORT}
   liquibase:
     enabled: false
   jpa:

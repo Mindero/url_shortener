@@ -4,14 +4,11 @@ import org.example.controller.dto.UserDto;
 import org.example.exception.URLisNotFind;
 import org.example.exception.UserExistException;
 import org.example.exception.UserPasswordIncorrect;
-import org.example.exception.logoutException;
+import org.example.exception.LogoutException;
 import org.example.service.object.Url;
 import org.example.controller.dto.UrlDto;
-import org.example.service.object.User;
-import org.example.service.url.UrlService;
 import org.example.service.user.UserService;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,12 +27,11 @@ public class UrlController {
         userService.register(userDto.login(), userDto.password());
     }
     @PostMapping(path="/logout")
-    public void logout() throws logoutException {
+    public void logout() throws LogoutException {
         userService.logout();
     }
     @PostMapping(path="/short", consumes = "application/json")
-    public String addShortUrl(@RequestBody UrlDto urlDto) throws logoutException{
-        System.out.println("Short");
+    public String addShortUrl(@RequestBody UrlDto urlDto) throws LogoutException {
         return userService.addUrl(new Url(urlDto.url()));
     }
     @GetMapping("/{shortUrl}")

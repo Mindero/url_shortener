@@ -7,17 +7,16 @@ import org.example.repo.user.UserRepository;
 import org.example.service.object.Url;
 import org.example.exception.URLisNotFind;
 import org.example.service.object.User;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
-public class UrlServiceImp implements UrlService{
+public class UrlServiceImpl implements UrlService{
     private final UrlRepository urlRepository;
 
-    public UrlServiceImp(UrlRepository urlRepository, UserRepository userRepository){
+    public UrlServiceImpl(UrlRepository urlRepository, UserRepository userRepository){
         this.urlRepository = urlRepository;
     }
     @Override
@@ -30,6 +29,7 @@ public class UrlServiceImp implements UrlService{
     }
 
     @Override
+    @Cacheable(cacheNames = "url", cacheManager = "RedisInMemoryCacheManager")
     public String getLongUrl(String shortUrl) throws URLisNotFind{
         if (!urlRepository.existsByShorturl(shortUrl))
             throw new URLisNotFind();
