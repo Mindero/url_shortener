@@ -5,14 +5,14 @@ import org.example.exception.URLisNotFind;
 import org.example.repo.url.UrlRepositoryImp;
 import org.example.service.object.Url;
 import org.example.service.url.UrlService;
-import org.example.service.url.UrlServiceImp;
+import org.example.service.url.UrlServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 public class UrlServiceTest {
-    private final UrlService urlService =new UrlServiceImp(new UrlRepositoryImp());
+    private final UrlService urlService =new UrlServiceImpl(new UrlRepositoryImp());
 
     @Test
     void testAddUrl(){

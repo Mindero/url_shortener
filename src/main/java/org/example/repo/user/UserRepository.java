@@ -1,6 +1,5 @@
 package org.example.repo.user;
 
-import org.example.jdbc.jdbcUtils;
 import org.example.repo.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

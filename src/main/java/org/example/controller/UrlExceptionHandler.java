@@ -9,14 +9,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.net.URL;
-
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class UrlExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(logoutException.class)
-    protected ResponseEntity<Object> handleLogout(logoutException ex){
+    @ExceptionHandler(LogoutException.class)
+    protected ResponseEntity<Object> handleLogout(LogoutException ex){
         ApiError error = new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage());
         return new ResponseEntity<Object>(error, error.getStatus());
     }
