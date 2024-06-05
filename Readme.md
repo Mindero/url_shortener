@@ -6,8 +6,12 @@
 ```
 ## to run docker:
 ```
-docker-compose rm\
+docker-compose rm
 docker-compose --env-file .\local_var\local.env up
+```
+## to stop docker:
+```
+docker-compose down
 ```
 ## to check postgres:
 ```

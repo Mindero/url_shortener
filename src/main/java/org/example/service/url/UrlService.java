@@ -4,9 +4,14 @@ import org.example.service.object.Url;
 import org.example.exception.URLisNotFind;
 import org.example.service.object.User;
 
+import java.util.List;
 import java.util.Optional;
 public interface UrlService {
     String addUrl(Url LongUrl, User user);
 
     String getLongUrl(String shortUrl) throws URLisNotFind;
+
+    void deleteUrl(String shortUrl);
+
+    List<String> getStrangeThing();
 }

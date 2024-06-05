@@ -5,11 +5,16 @@ import org.example.exception.URLisNotFind;
 import org.example.exception.UserExistException;
 import org.example.exception.UserPasswordIncorrect;
 import org.example.exception.LogoutException;
+import org.example.kafka.UrlDeleteProducer;
 import org.example.service.object.Url;
 import org.example.controller.dto.UrlDto;
+import org.example.service.url.UrlService;
 import org.example.service.user.UserService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/url_shortener")
@@ -36,11 +41,7 @@ public class UrlController {
     }
     @GetMapping("/{shortUrl}")
     public UrlDto getLongUrl(@PathVariable("shortUrl") String shortUrl) throws URLisNotFind{
+
         return new UrlDto(userService.getLongUrl(shortUrl));
     }
-    // Test
-//    @GetMapping("/print")
-//    public String print(){
-//        return "Hello";
-//    }
 }

@@ -39,4 +39,10 @@ public class UrlEntity {
     public void setLongurl(String longurl) {
         this.longurl = longurl;
     }
+
+    @PreRemove
+    public void preRemove(){
+        this.user.getUrls().clear();
+        this.user = null;
+    }
 }

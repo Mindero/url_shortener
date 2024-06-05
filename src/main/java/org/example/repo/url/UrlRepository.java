@@ -12,4 +12,8 @@ import java.util.List;
 public interface UrlRepository extends JpaRepository<UrlEntity, String> {
     List<String> getLongurlByShorturl(String shorturl);
     boolean existsByShorturl(String shorturl);
+
+    @Query(nativeQuery = true,
+            value = "SELECT short_url FROM urls")
+    List<String> getStrangeThing();
 }

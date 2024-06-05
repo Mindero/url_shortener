@@ -22,3 +22,10 @@ logging:
   level:
     sql: INFO
 
+kafka:
+  bootstrap-servers: kafka:29092
+
+# cron
+schedulers:
+  # every minute
+  url-delete: "0 * * * * *"

@@ -4,7 +4,6 @@ services:
     build:
       context: .
       dockerfile: database.Dockerfile
-    restart: always
     container_name: db
     environment:
       POSTGRES_DB: ${DB_NAME}
@@ -12,6 +11,53 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - 5432:5432
+
+  zookeeper:
+    image: "confluentinc/cp-zookeeper:7.6.1"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: "confluentinc/cp-kafka:7.6.1"
+    hostname: kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    ports:
+      - 29092:29092
+    depends_on:
+      - zookeeper
+#    healthcheck:
+#      test: [ "CMD", "kafka-topics.sh", "--list", "--zookeeper", "zookeeper:2181" ]
+#      interval: 5s
+#      timeout: 10s
+#      retries: 5
+
+#  CREATE TOPICS
+  init-kafka:
+    image: "confluentinc/cp-kafka:7.6.1"
+    depends_on:
+      - "kafka"
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+        "
+        # blocks until kafka is reachable
+        kafka-topics --bootstrap-server kafka:29092 --list
+
+        echo -e 'Creating kafka topics'
+        kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic url-delete-topic --replication-factor 1 --partitions 1
+
+        echo -e 'Successfully created the following topics:'
+        kafka-topics --bootstrap-server kafka:29092 --list
+        "
+
   url-service:
     build:
       context: .
@@ -29,6 +75,11 @@ services:
     ports:
       - 8080:8080
     depends_on:
+#      db:
+#        condition: service_completed_successfully
+#      kafka:
+#        condition: service_healthy
       - db
+      - kafka
     stdin_open: true
     tty: true

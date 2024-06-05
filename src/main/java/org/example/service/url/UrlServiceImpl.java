@@ -10,6 +10,7 @@ import org.example.service.object.User;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -35,6 +36,16 @@ public class UrlServiceImpl implements UrlService{
             throw new URLisNotFind();
         var res = urlRepository.findById(shortUrl);
         return res.get().getLongurl();
+    }
+
+    @Override
+    public void deleteUrl(String shortUrl){
+        urlRepository.deleteById(shortUrl);
+    }
+
+    @Override
+    public List<String> getStrangeThing(){
+        return urlRepository.getStrangeThing();
     }
     private String createShortUrl(String longUrl){
         Random rnd = new Random();
