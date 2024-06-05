@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Component
@@ -22,12 +24,12 @@ public class UrlDeleteScheduler {
         this.urlService = urlService;
     }
 
-    @SchedulerLock(name=URL_DELETE_LOCK_NAME, lockAtMostFor = "PT20H", lockAtLeastFor = "PT20H")
+    @SchedulerLock(name=URL_DELETE_LOCK_NAME, lockAtMostFor = "15m")
     @Scheduled(cron="${schedulers.url-delete}", zone ="Europe/Moscow")
     public void deleteUrl(){
         System.out.println("Deleted");
         try{
-            List<String> ids = urlService.getStrangeThing();
+            List<String> ids = urlService.getAllNotUpdatedFor();
             System.out.println("SIZE " + ids.size());
             urlDeleteProducer.sendMessages(ids);
         }

@@ -4,6 +4,7 @@ package org.example.config.kafka;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.example.kafka.UrlDeleteConsumer;
+import org.example.kafka.dto.CntUrlKafkaMsg;
 import org.example.kafka.dto.DeletedUrlKafkaMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,17 +28,16 @@ public class ConsumerKafkaConfig {
     @Value("${kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    private static final String GROUP_ID = "url-group";
 
     @Bean
-    public ConsumerFactory<String, DeletedUrlKafkaMsg> consumerFactory() {
+    public ConsumerFactory<String, DeletedUrlKafkaMsg> DeletedUrlconsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapServers);
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
-                GROUP_ID);
+                "url-delete");
 
         return new DefaultKafkaConsumerFactory<>(
                 props,
@@ -50,7 +50,32 @@ public class ConsumerKafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, DeletedUrlKafkaMsg> kafkaDeleteUrlListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, DeletedUrlKafkaMsg> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+        factory.setConsumerFactory(DeletedUrlconsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, CntUrlKafkaMsg> CntUrlconsumerFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapServers);
+        props.put(
+                ConsumerConfig.GROUP_ID_CONFIG,
+                "url-cnt");
+
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new JsonDeserializer<>(CntUrlKafkaMsg.class)
+        );
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, CntUrlKafkaMsg> kafkaCntUrlListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, CntUrlKafkaMsg> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(CntUrlconsumerFactory());
         return factory;
     }
 

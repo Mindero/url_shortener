@@ -4,11 +4,14 @@ import org.example.exception.URLisNotFind;
 import org.example.exception.UserExistException;
 import org.example.exception.UserPasswordIncorrect;
 import org.example.exception.LogoutException;
+import org.example.kafka.UrlCountProducer;
 import org.example.repo.entity.UserEntity;
 import org.example.repo.user.UserRepository;
 import org.example.service.object.Url;
 import org.example.service.object.User;
 import org.example.service.url.UrlService;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,9 +21,11 @@ public class UserServiceImpl implements UserService{
     static User user =null;
     private final UserRepository userRepository;
     private final UrlService urlService;
-    public UserServiceImpl(UserRepository userRepository, UrlService urlService ) {
+    private final UrlCountProducer urlCountProducer;
+    public UserServiceImpl(UserRepository userRepository, UrlService urlService, UrlCountProducer urlCountProducer) {
         this.userRepository = userRepository;
         this.urlService = urlService;
+        this.urlCountProducer = urlCountProducer;
     }
     @Override
     public void register(String login, String password) throws UserExistException{
@@ -49,6 +54,8 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public String getLongUrl(String shortUrl) throws URLisNotFind{
-        return urlService.getLongUrl(shortUrl);
+        String longUrl = urlService.getLongUrl(shortUrl);
+        urlCountProducer.sendMessages(shortUrl);
+        return longUrl;
     }
 }

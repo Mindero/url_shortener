@@ -15,7 +15,7 @@ public class UrlDeleteConsumer {
     }
     @KafkaListener(topics="url-delete-topic", containerFactory = "kafkaDeleteUrlListenerContainerFactory")
     public void consume(DeletedUrlKafkaMsg message){
-        System.out.println("Here");
+        System.out.println("Consume delete");
         if (message.shortUrl() != null){
             urlService.deleteUrl(message.shortUrl());
         }

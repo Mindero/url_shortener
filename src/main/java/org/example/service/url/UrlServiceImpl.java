@@ -1,16 +1,19 @@
 package org.example.service.url;
 
+import org.example.kafka.UrlCountProducer;
 import org.example.repo.entity.UrlEntity;
 import org.example.repo.entity.UserEntity;
 import org.example.repo.url.UrlRepository;
-import org.example.repo.user.UserRepository;
 import org.example.service.object.Url;
 import org.example.exception.URLisNotFind;
 import org.example.service.object.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -18,14 +21,16 @@ import java.util.Random;
 public class UrlServiceImpl implements UrlService{
     private final UrlRepository urlRepository;
 
-    public UrlServiceImpl(UrlRepository urlRepository, UserRepository userRepository){
+    @Autowired
+    public UrlServiceImpl(UrlRepository urlRepository){
         this.urlRepository = urlRepository;
     }
+
     @Override
     public String addUrl(Url longUrl, User user){
         String shortUrl = createShortUrl(longUrl.url());
         UserEntity userEntity = new UserEntity(user.id());
-        UrlEntity urlEntity = new UrlEntity(shortUrl, longUrl.url(), userEntity);
+        UrlEntity urlEntity = new UrlEntity(shortUrl, longUrl.url(), userEntity, 0);
         urlRepository.save(urlEntity);
         return shortUrl;
     }
@@ -46,9 +51,16 @@ public class UrlServiceImpl implements UrlService{
     }
 
     @Override
-    public List<String> getStrangeThing(){
-        return urlRepository.getStrangeThing();
+    public List<String> getAllNotUpdatedFor(){
+        return urlRepository.findAllByLessCnt(1);
     }
+    @Override
+    public void updateCnt(String shortUrl){
+        UrlEntity urlEntity = urlRepository.getReferenceById(shortUrl);
+        urlEntity.setCnt(urlEntity.getCnt() + 1);
+        urlRepository.save(urlEntity);
+    }
+
     private String createShortUrl(String longUrl){
         Random rnd = new Random();
         final int sizeShortUrl = 5;

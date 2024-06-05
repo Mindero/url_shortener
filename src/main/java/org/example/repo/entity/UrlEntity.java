@@ -15,13 +15,17 @@ public class UrlEntity {
     @JoinColumn(name="user_id", nullable = true)
     private UserEntity user;
 
+    @Column(name="cnt", nullable = false)
+    private int cnt;
+
     public UrlEntity(){
 
     }
-    public UrlEntity(String shorturl, String longurl, UserEntity user) {
+    public UrlEntity(String shorturl, String longurl, UserEntity user, int cnt) {
         this.shorturl = shorturl;
         this.longurl = longurl;
         this.user = user;
+        this.cnt = cnt;
     }
 
     public String getShorturl() {
@@ -44,5 +48,13 @@ public class UrlEntity {
     public void preRemove(){
         this.user.getUrls().clear();
         this.user = null;
+    }
+
+    public int getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(int cnt) {
+        this.cnt = cnt;
     }
 }

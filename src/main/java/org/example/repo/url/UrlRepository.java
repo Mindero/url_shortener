@@ -14,6 +14,6 @@ public interface UrlRepository extends JpaRepository<UrlEntity, String> {
     boolean existsByShorturl(String shorturl);
 
     @Query(nativeQuery = true,
-            value = "SELECT short_url FROM urls")
-    List<String> getStrangeThing();
+            value = "SELECT short_url FROM urls WHERE cnt < :cnt")
+    List<String> findAllByLessCnt(int cnt);
 }

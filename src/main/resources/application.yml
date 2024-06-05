@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: url-app
   datasource:
@@ -22,6 +24,7 @@ spring:
 logging:
   level:
     sql: INFO
+
 
 kafka:
   bootstrap-servers: kafka:29092
