@@ -7,6 +7,7 @@ import org.example.repo.user.UserRepository;
 import org.example.service.object.Url;
 import org.example.exception.URLisNotFind;
 import org.example.service.object.User;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,7 @@ public class UrlServiceImpl implements UrlService{
     }
 
     @Override
+    @CacheEvict(cacheNames = "url", cacheManager = "RedisInMemoryCacheManager")
     public void deleteUrl(String shortUrl){
         urlRepository.deleteById(shortUrl);
     }

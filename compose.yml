@@ -12,6 +12,13 @@ services:
     ports:
       - 5432:5432
 
+  redis:
+    image: "redis:7.0.15-alpine"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+
   zookeeper:
     image: "confluentinc/cp-zookeeper:7.6.1"
     environment:
@@ -72,6 +79,8 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_PORT: ${DB_PORT}
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: ${REDIS_PORT}
     ports:
       - 8080:8080
     depends_on:
@@ -81,5 +90,6 @@ services:
 #        condition: service_healthy
       - db
       - kafka
+      - redis
     stdin_open: true
     tty: true

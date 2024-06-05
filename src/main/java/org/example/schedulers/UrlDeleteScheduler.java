@@ -1,5 +1,6 @@
 package org.example.schedulers;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.example.kafka.UrlDeleteProducer;
 import org.example.service.url.UrlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class UrlDeleteScheduler {
         this.urlService = urlService;
     }
 
+    // @SchedulerLock(name=URL_DELETE_LOCK_NAME, lockAtMostFor = "PT20H", lockAtLeastFor = "PT20H")
     @Scheduled(cron="${schedulers.url-delete}", zone ="Europe/Moscow")
     public void deleteUrl(){
         System.out.println("Deleted");
