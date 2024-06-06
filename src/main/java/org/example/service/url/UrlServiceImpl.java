@@ -52,7 +52,7 @@ public class UrlServiceImpl implements UrlService{
 
     @Override
     public List<String> getAllNotUpdatedFor(){
-        return urlRepository.findAllByLessCnt(1);
+        return urlRepository.findAllByLessCnt(10);
     }
     @Override
     public void updateCnt(String shortUrl){
