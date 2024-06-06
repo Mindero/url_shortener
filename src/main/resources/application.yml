@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: url-app
   datasource:
@@ -8,9 +10,10 @@ spring:
     driver-class: org.postgresql.Driver
   cache:
     type: redis
-  redis:
-    host: localhost
-    port: ${REDIS_PORT}
+  data:
+    redis:
+      host: redis
+      port: 6379
   liquibase:
     enabled: false
   jpa:
@@ -22,3 +25,11 @@ logging:
   level:
     sql: INFO
 
+
+kafka:
+  bootstrap-servers: kafka:29092
+
+# cron
+schedulers:
+  # every minute
+  url-delete: "0 * * * * *"

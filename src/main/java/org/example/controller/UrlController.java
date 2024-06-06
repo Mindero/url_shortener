@@ -1,14 +1,14 @@
 package org.example.controller;
 
+import org.example.controller.dto.UrlRequestDto;
 import org.example.controller.dto.UserDto;
 import org.example.exception.URLisNotFind;
 import org.example.exception.UserExistException;
 import org.example.exception.UserPasswordIncorrect;
 import org.example.exception.LogoutException;
 import org.example.service.object.Url;
-import org.example.controller.dto.UrlDto;
+import org.example.controller.dto.UrlResponseDto;
 import org.example.service.user.UserService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,16 +31,12 @@ public class UrlController {
         userService.logout();
     }
     @PostMapping(path="/short", consumes = "application/json")
-    public String addShortUrl(@RequestBody UrlDto urlDto) throws LogoutException {
-        return userService.addUrl(new Url(urlDto.url()));
+    public String addShortUrl(@RequestBody UrlRequestDto urlRequestDto) throws LogoutException {
+        return userService.addUrl(new Url(urlRequestDto.url(), urlRequestDto.onlyOnce()));
     }
     @GetMapping("/{shortUrl}")
-    public UrlDto getLongUrl(@PathVariable("shortUrl") String shortUrl) throws URLisNotFind{
-        return new UrlDto(userService.getLongUrl(shortUrl));
+    public UrlResponseDto getLongUrl(@PathVariable("shortUrl") String shortUrl) throws URLisNotFind{
+
+        return new UrlResponseDto(userService.getLongUrl(shortUrl));
     }
-    // Test
-//    @GetMapping("/print")
-//    public String print(){
-//        return "Hello";
-//    }
 }

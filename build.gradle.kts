@@ -30,6 +30,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jetty")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("net.javacrumbs.shedlock:shedlock-spring:5.13.0")
+    implementation("net.javacrumbs.shedlock:shedlock-provider-redis-spring:5.13.0")
+    implementation("org.springframework.kafka:spring-kafka:3.1.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.3")
 }
 
 tasks.test {
