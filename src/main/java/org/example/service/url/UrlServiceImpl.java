@@ -1,5 +1,6 @@
 package org.example.service.url;
 
+import jakarta.transaction.Transactional;
 import org.example.kafka.UrlCountProducer;
 import org.example.repo.entity.UrlEntity;
 import org.example.repo.entity.UserEntity;
@@ -52,6 +53,7 @@ public class UrlServiceImpl implements UrlService{
     }
 
     @Override
+    @Transactional
     @CacheEvict(cacheNames = "url", cacheManager = "RedisInMemoryCacheManager")
     public void deleteUrl(String shortUrl){
         urlRepository.deleteById(shortUrl);

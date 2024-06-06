@@ -15,6 +15,6 @@ public interface UrlRepository extends JpaRepository<UrlEntity, String> {
     boolean existsByShorturl(String shorturl);
 
     @Query(nativeQuery = true,
-            value = "SELECT short_url FROM urls WHERE updated_at < :updatedDate")
-    List<String> findAllByUpdatedDateBefore(Instant updatedDate);
+            value = "SELECT short_url FROM urls WHERE created_at < :createdDate")
+    List<String> findAllByUpdatedDateBefore(Instant createdDate);
 }

@@ -22,8 +22,8 @@ public class UrlEntity {
     private boolean onlyonce;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
+    @Column(name = "created_at", nullable = false)
+    private Instant created_at;
 
     public UrlEntity(){
 
@@ -63,5 +63,9 @@ public class UrlEntity {
 
     public void setOnlyonce(boolean onlyonce) {
         this.onlyonce = onlyonce;
+    }
+
+    public Instant getCreated_at() {
+        return created_at;
     }
 }

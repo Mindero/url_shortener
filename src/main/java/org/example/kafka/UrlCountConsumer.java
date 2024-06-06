@@ -16,7 +16,6 @@ public class UrlCountConsumer {
     public UrlCountConsumer(UrlService urlService){
         this.urlService = urlService;
     }
-    @Transactional
     @KafkaListener(topics="url-cnt-topic", groupId = "url-cnt",containerFactory = "kafkaCntUrlListenerContainerFactory")
     public void consume(CntUrlKafkaMsg message){
         System.out.println("Consume count");

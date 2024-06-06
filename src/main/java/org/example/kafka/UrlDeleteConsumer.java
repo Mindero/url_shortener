@@ -16,7 +16,6 @@ public class UrlDeleteConsumer {
 
         this.urlService = urlService;
     }
-    @Transactional
     @KafkaListener(topics="url-delete-topic", groupId = "url-delete", containerFactory = "kafkaDeleteUrlListenerContainerFactory")
     public void consume(DeletedUrlKafkaMsg message){
         System.out.println("Consume delete");
