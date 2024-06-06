@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -14,6 +15,6 @@ public interface UrlRepository extends JpaRepository<UrlEntity, String> {
     boolean existsByShorturl(String shorturl);
 
     @Query(nativeQuery = true,
-            value = "SELECT short_url FROM urls WHERE cnt < :cnt")
-    List<String> findAllByLessCnt(int cnt);
+            value = "SELECT short_url FROM urls WHERE updated_at < :updatedDate")
+    List<String> findAllByUpdatedDateBefore(Instant updatedDate);
 }

@@ -21,11 +21,9 @@ public class UserServiceImpl implements UserService{
     static User user =null;
     private final UserRepository userRepository;
     private final UrlService urlService;
-    private final UrlCountProducer urlCountProducer;
-    public UserServiceImpl(UserRepository userRepository, UrlService urlService, UrlCountProducer urlCountProducer) {
+    public UserServiceImpl(UserRepository userRepository, UrlService urlService) {
         this.userRepository = userRepository;
         this.urlService = urlService;
-        this.urlCountProducer = urlCountProducer;
     }
     @Override
     public void register(String login, String password) throws UserExistException{
@@ -54,8 +52,6 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public String getLongUrl(String shortUrl) throws URLisNotFind{
-        String longUrl = urlService.getLongUrl(shortUrl);
-        urlCountProducer.sendMessages(shortUrl);
-        return longUrl;
+        return urlService.getLongUrl(shortUrl);
     }
 }

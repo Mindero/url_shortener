@@ -19,8 +19,9 @@ public class UrlCountConsumer {
     @Transactional
     @KafkaListener(topics="url-cnt-topic", groupId = "url-cnt",containerFactory = "kafkaCntUrlListenerContainerFactory")
     public void consume(CntUrlKafkaMsg message){
+        System.out.println("Consume count");
         if (message.shortUrl() != null){
-            urlService.updateCnt(message.shortUrl());
+            urlService.deleteUrl(message.shortUrl());
         }
     }
 }

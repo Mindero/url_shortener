@@ -16,5 +16,4 @@ public interface UrlService {
 
     List<String> getAllNotUpdatedFor();
 
-    void updateCnt(String shortUrl);
 }

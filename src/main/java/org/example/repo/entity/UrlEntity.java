@@ -1,6 +1,9 @@
 package org.example.repo.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
 
 @Entity(name="url")
 @Table(name="urls")
@@ -15,17 +18,21 @@ public class UrlEntity {
     @JoinColumn(name="user_id", nullable = true)
     private UserEntity user;
 
-    @Column(name="cnt", nullable = false)
-    private int cnt;
+    @Column(name="only_once", nullable = false)
+    private boolean onlyonce;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
 
     public UrlEntity(){
 
     }
-    public UrlEntity(String shorturl, String longurl, UserEntity user, int cnt) {
+    public UrlEntity(String shorturl, String longurl, UserEntity user, boolean onlyonce) {
         this.shorturl = shorturl;
         this.longurl = longurl;
         this.user = user;
-        this.cnt = cnt;
+        this.onlyonce = onlyonce;
     }
 
     public String getShorturl() {
@@ -50,11 +57,11 @@ public class UrlEntity {
         this.user = null;
     }
 
-    public int getCnt() {
-        return cnt;
+    public boolean getOnlyonce() {
+        return onlyonce;
     }
 
-    public void setCnt(int cnt) {
-        this.cnt = cnt;
+    public void setOnlyonce(boolean onlyonce) {
+        this.onlyonce = onlyonce;
     }
 }
